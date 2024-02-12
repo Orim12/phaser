@@ -116,32 +116,13 @@
         return; // Stop met spawnen als stopSpawning waar is
             }
 
-            var gapHeight = 150;
-            var pipeY = Phaser.Math.Between(100, 350);
-
-            var topPipe = pipes.create(400, pipeY, 'pipe');
-            topPipe.setOrigin(0, 1);
-            topPipe.setVelocityX(-200);
-
-            var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe');
-            bottomPipe.setVelocityX(-200);
-
-            // Move the detection line to the position of the pipes
-            detectionLine.x = topPipe.x + topPipe.width;
-
+            // Remove pipes when they go out of the screen
             this.physics.world.on('worldbounds', function (body) {
-                if ((body.gameObject === topPipe || body.gameObject === bottomPipe) && body.blocked.left) {
-                    topPipe.destroy();
-                    bottomPipe.destroy();
+               if (body.gameObject === pipe && body.blocked.left) {
+                    pipe.destroy();
                     incrementScore();
-
-                    // Spawn new pipes and update the detection line position
-                    spawnPipes();
                 }
             });
-
-            // Add an overlap event for player detection
-            this.physics.add.overlap(player, detectionLine, hitDetectionLine, null, this);
         }
         function hitDetectionLine() {
             // Voer hier de acties uit die je wilt wanneer de speler de lijn kruist
