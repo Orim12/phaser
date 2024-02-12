@@ -65,7 +65,7 @@
             scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
             // Add gravity to the bird
-            // player.body.gravity.y = 800;
+             player.body.gravity.y = 800;
 
             // Timer to spawn pipes
             this.time.addEvent({ delay: 1500, callback: spawnPipes, callbackScope: this, loop: true });
