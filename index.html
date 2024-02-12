@@ -67,7 +67,6 @@
 
             // Add gravity to the bird
             player.body.gravity.y = 800;
-            pipes.body.gravity.y = 0;
 
             // Timer to spawn pipes
             this.time.addEvent({ delay: 1500, callback: spawnPipes, callbackScope: this, loop: true });
@@ -92,6 +91,7 @@
         function spawnPipes() {
             var pipe = pipes.create(400, Phaser.Math.Between(100, 500), 'pipe');
             pipe.setVelocityX(-200);
+            pipe.setVelocityY(0);
 
             // Remove pipes when they go out of the screen
             this.physics.world.on('worldbounds', function (body) {
