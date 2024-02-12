@@ -74,6 +74,8 @@
         function update() {
             if (keyW.isDown) {
                 player.setVelocityY(-330);
+            } else if (cursors.up.isDown) {
+                player.setVelocityY(-330);
             } else if (keyS.isDown) {
                 player.setVelocityY(330);
             } else {
