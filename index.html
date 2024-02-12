@@ -102,11 +102,12 @@
 
         function hitPipe() {
             // Game over logic
-            this.physics.pause();
+            
             player.setTint(0xff0000);
             player.anims.play('turn');
             gameOverText = this.add.text(100, 250, 'Game Over', { fontSize: '48px', fill: '#000' });
             gameOverText.setDepth(1);
+            this.physics.pause();
         }
 
         function incrementScore() {
