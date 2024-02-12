@@ -50,7 +50,7 @@
             this.add.image(200, 300, 'sky');
 
             pipes = this.physics.add.group();
-            pipes.body.physics.y = 0;
+            
 
             player = this.physics.add.sprite(100, 300, 'bird');
             player.setCollideWorldBounds(true);
@@ -67,6 +67,7 @@
 
             // Add gravity to the bird
             player.body.gravity.y = 800;
+            pipes.body.gravity.y = 0;
 
             // Timer to spawn pipes
             this.time.addEvent({ delay: 1500, callback: spawnPipes, callbackScope: this, loop: true });
