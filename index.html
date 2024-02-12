@@ -20,9 +20,6 @@
                 arcade: {
                     gravity: { y: 300 },
                     debug: false,
-                },
-                pipes_grav: {
-                    gravity: { y: 0 },
                 }
             },
             scene: {
@@ -52,7 +49,8 @@
         function create() {
             this.add.image(200, 300, 'sky');
 
-            pipes = this.physics.add(pipes_grav);
+            pipes = this.physics.add.group();
+            pipes.body.physics.y = 0
 
             player = this.physics.add.sprite(100, 300, 'bird');
             player.setCollideWorldBounds(true);
