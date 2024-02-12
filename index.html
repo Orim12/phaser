@@ -52,7 +52,7 @@
         function create() {
             this.add.image(200, 300, 'sky');
 
-            pipes = this.physics.add.group(pipes_grav);
+            pipes = this.physics.add(pipes_grav);
 
             player = this.physics.add.sprite(100, 300, 'bird');
             player.setCollideWorldBounds(true);
