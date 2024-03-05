@@ -4,7 +4,6 @@
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Tweeter</title>
     <style>
         body { margin: 0; }
@@ -12,7 +11,6 @@
 </head>
 
 <body>
-  
     <script>var config = {
             type: Phaser.AUTO,
             width: 750,
@@ -58,9 +56,12 @@
             player = this.physics.add.sprite(100, 300, 'bird');
             player.setCollideWorldBounds(true);
 
+<<<<<<< HEAD
             createDetectionLine();
             spawnPipes();
 
+=======
+>>>>>>> parent of b778c7ff0 (e)
             this.physics.add.collider(player, pipes, hitPipe, null, this);
 
             cursors = this.input.keyboard.createCursorKeys();
@@ -92,77 +93,42 @@
             if (keyW.isUp && player.body.touching.up) {
                 player.setVelocityY(-330);
             }
-            scoreText.setText('Score:'+ score);
-           
         }
-        function createDetectionLine() {
-            detectionLine = this.add.graphics();
-            detectionLine.lineStyle(2, 0xff0000);
-            detectionLine.beginPath();
-            detectionLine.moveTo(0, 0);
-            detectionLine.lineTo(0, game.config.height);
-            detectionLine.closePath();
-            detectionLine.strokePath();
-
-            this.physics.world.enable(detectionLine);
-            detectionLine.body.setAllowGravity(false);
-            detectionLine.body.moves = false;
-        }
-
-        var stopSpawning = false; // Globale variabele om het spawnen te stoppen
 
         function spawnPipes() {
-            if (stopSpawning) {
-        return; // Stop met spawnen als stopSpawning waar is
-            }
+            var pipe = pipes.create(400, Phaser.Math.Between(100, 500), 'pipe');
+            pipe.setVelocityX(-200);
 
-            var gapHeight = 150;
-            var pipeY = Phaser.Math.Between(100, 350);
-
-            var topPipe = pipes.create(400, pipeY, 'pipe');
-            topPipe.setOrigin(0, 1);
-            topPipe.setVelocityX(-200);
-
-            var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe');
-            bottomPipe.setVelocityX(-200);
-
-            // Move the detection line to the position of the pipes
-            detectionLine.x = topPipe.x + topPipe.width;
-
+            // Remove pipes when they go out of the screen
             this.physics.world.on('worldbounds', function (body) {
-                if ((body.gameObject === topPipe || body.gameObject === bottomPipe) && body.blocked.left) {
-                    topPipe.destroy();
-                    bottomPipe.destroy();
+               if (body.gameObject === pipe && body.blocked.left) {
+                    pipe.destroy();
                     incrementScore();
-
-                    // Spawn new pipes and update the detection line position
-                    spawnPipes();
                 }
             });
+<<<<<<< HEAD
 
             // Add an overlap event for player detection
             this.physics.add.overlap(player, detectionLine, hitDetectionLine, null, this);
+=======
+>>>>>>> parent of b778c7ff0 (e)
         }
-        function hitDetectionLine() {
-            // Voer hier de acties uit die je wilt wanneer de speler de lijn kruist
-            console.log('Player crossed the detection line!');
-            score += 1;
-        }
- 
-
-
 
         function hitPipe() {
             // Game over logic
-            
             this.physics.pause();
-            player.setTint(0x00FFFF);
+            player.setTint(0xff0000);
+            player.anims.play('turn');
             gameOverText = this.add.text(100, 250, 'Game Over', { fontSize: '48px', fill: '#000' });
             gameOverText.setDepth(1);
-            stopSpawning = true
+        }
+
+        function incrementScore() {
+            score += 1;
+            scoreText.setText('Score: ' + score);
         }
     </script>
-    
+
 </body>
 </html>
 
