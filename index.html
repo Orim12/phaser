@@ -39,7 +39,6 @@
         var scoreText;
         let keyS;
         let keyW;
-        var detectionLine;
 
         var game = new Phaser.Game(config);
 
@@ -58,9 +57,6 @@
             player = this.physics.add.sprite(100, 300, 'bird');
             player.setCollideWorldBounds(true);
 
-            createDetectionLine();
-            spawnPipes();
-
             this.physics.add.collider(player, pipes, hitPipe, null, this);
 
             cursors = this.input.keyboard.createCursorKeys();
@@ -72,7 +68,7 @@
             scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
             // Add gravity to the bird
-            player.body.gravity.y = 800;
+            player.body.gravity.y = 1000;
 
             // Timer to spawn pipes
             this.time.addEvent({ delay: 1500, callback: spawnPipes, callbackScope: this, loop: true });
@@ -95,19 +91,6 @@
             scoreText.setText('Score:'+ score);
            
         }
-        function createDetectionLine() {
-            detectionLine = this.add.graphics();
-            detectionLine.lineStyle(2, 0xff0000);
-            detectionLine.beginPath();
-            detectionLine.moveTo(0, 0);
-            detectionLine.lineTo(0, game.config.height);
-            detectionLine.closePath();
-            detectionLine.strokePath();
-
-            this.physics.world.enable(detectionLine);
-            detectionLine.body.setAllowGravity(false);
-            detectionLine.body.moves = false;
-        }
 
         var stopSpawning = false; // Globale variabele om het spawnen te stoppen
 
@@ -126,22 +109,16 @@
             var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe');
             bottomPipe.setVelocityX(-200);
 
-            // Move the detection line to the position of the pipes
-            detectionLine.x = topPipe.x + topPipe.width;
-
             this.physics.world.on('worldbounds', function (body) {
                 if ((body.gameObject === topPipe || body.gameObject === bottomPipe) && body.blocked.left) {
                     topPipe.destroy();
                     bottomPipe.destroy();
                     incrementScore();
-
-                    // Spawn new pipes and update the detection line position
-                    spawnPipes();
                 }
             });
 
             // Add an overlap event for player detection
-            this.physics.add.overlap(player, detectionLine, hitDetectionLine, null, this);
+            this.physics.add.overlap(player, null, this);
         }
         function hitDetectionLine() {
             // Voer hier de acties uit die je wilt wanneer de speler de lijn kruist
