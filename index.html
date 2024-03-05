@@ -39,7 +39,6 @@
         var scoreText;
         let keyS;
         let keyW;
-        var detectionLine;
 
         var game = new Phaser.Game(config);
 
@@ -59,7 +58,6 @@
             player.setCollideWorldBounds(true);
 
             createDetectionLine();
-            spawnPipes();
 
             this.physics.add.collider(player, pipes, hitPipe, null, this);
 
@@ -142,6 +140,7 @@
 
             // Add an overlap event for player detection
             this.physics.add.overlap(player, detectionLine, hitDetectionLine, null, this);
+
         }
         function hitDetectionLine() {
             // Voer hier de acties uit die je wilt wanneer de speler de lijn kruist
