@@ -108,23 +108,21 @@
             topPipe.setVelocityX(-200);
 
             var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe');
+            var toptopPipe = pipes.create(400, pipeY + -gapHeight, 'pipe');
             bottomPipe.setVelocityX(-200);
+            toptopPipe.setVelocityX(-200);
 
             this.physics.world.on('worldbounds', function (body) {
-                if ((body.gameObject === topPipe || body.gameObject === bottomPipe) && body.blocked.left) {
+                if ((body.gameObject === topPipe || body.gameObject === bottomPipe || body.gameObject === toptopPipe) && body.blocked.left) {
                     topPipe.destroy();
                     bottomPipe.destroy();
+                    toptopPipe.destroy();
                     incrementScore();
                 }
             });
 
             // Add an overlap event for player detection
             this.physics.add.overlap(player, null, this);
-        }
-        function hitDetectionLine() {
-            // Voer hier de acties uit die je wilt wanneer de speler de lijn kruist
-            console.log('Player crossed the detection line!');
-            score += 1;
         }
  
 
