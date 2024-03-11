@@ -35,7 +35,7 @@
         var player;
         var pipes;
         var cursors;
-        var score = 0;
+        var score = -1;
         var scoreText;
         let keyS;
         let keyW;
@@ -101,6 +101,7 @@
 
             var gapHeight = 150;
             var pipeY = Phaser.Math.Between(100, 350);
+            score += 1;
 
             var topPipe = pipes.create(400, pipeY, 'pipe');
             topPipe.setOrigin(0, 1);
