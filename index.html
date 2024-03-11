@@ -99,11 +99,11 @@
         return; // Stop met spawnen als stopSpawning waar is
             }
 
-            var gapHeight = 150;
+            var gapHeight = 200;
             var pipeY = Phaser.Math.Between(100, 350);
             score += 1;
 
-            var topPipe = pipes.create(400, pipeY, 'pipe');
+            var topPipe = pipes.create(388, pipeY, 'pipe');
             topPipe.setOrigin(0, 1);
             topPipe.setVelocityX(-200);
 
@@ -134,8 +134,8 @@
             // Game over logic
             
             this.physics.pause();
-            player.setTint(0x00FFFF);
-            gameOverText = this.add.text(100, 250, 'Game Over', { fontSize: '48px', fill: '#000' });
+            player.setTint(0xFF0000);
+            gameOverText = this.add.text(100, 250, 'Game Over\n press f5 to retry', { fontSize: '48px', fill: '#000' });
             gameOverText.setDepth(1);
             stopSpawning = true
         }
