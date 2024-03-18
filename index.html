@@ -189,7 +189,7 @@ pipes.getChildren().forEach(function(pipe) {
             
             this.physics.pause();
             player.setTint(0xFF0000);
-            gameOverText = this.add.text(100, 250, 'Game Over\n press f5 to retry', { fontSize: '48px', fill: '#000' });
+            gameOverText = this.add.text(100, 250, 'Game Over\n press f5 to retry\n press p to see hitbox', { fontSize: '48px', fill: '#fff' });
             gameOverText.setDepth(1);
             stopSpawning = true
         }
