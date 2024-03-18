@@ -133,12 +133,13 @@ pipes.getChildren().forEach(function(pipe) {
 
   var gapHeight = 300;
   var pipeY = Phaser.Math.Between(100, 350);
+  var speed = -200
   score += 1;
   updateScore.call(this);
 
   var topPipe = pipes.create(388, pipeY, 'pipe', { body: { width: 10, height: 100 } });
   topPipe.setOrigin(0, 1);
-  topPipe.setVelocityX(-200);
+  topPipe.setVelocityX(speed);
   topPipe.body.setSize(10, 10)
   
 
@@ -147,8 +148,8 @@ pipes.getChildren().forEach(function(pipe) {
 
   var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe', { body: { width: 10, height: 100 } });
   var toptopPipe = pipes.create(400, pipeY + -gapHeight, 'pipe', { body: { width: 10, height: 100 } });
-  bottomPipe.setVelocityX(-200);
-  toptopPipe.setVelocityX(-200);
+  bottomPipe.setVelocityX(speed);
+  toptopPipe.setVelocityX(speed);
   bottomPipe.body.setSize(10, 20)
   toptopPipe.body.setSize(10, 30)
 
@@ -203,6 +204,9 @@ pipes.getChildren().forEach(function(pipe) {
         player.body.height
     );
             
+        }
+        function pipespeed(){
+            topPipe.setVelocityX(speed - 100)
         }
     </script>
     
