@@ -46,6 +46,8 @@
         var scoreText1;
         let keyS;
         let keyW;
+        let keyP
+        var hitboxVisual;
 
         var game = new Phaser.Game(config);
 
@@ -71,9 +73,10 @@
 
             keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
             keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+            keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
             // Display the score
-            scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
+            scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
             scoreText = this.add.text(450, 16, 'High Score: ' + highScore, { fontSize: '32px', fill: '#fff' });
 
             // Add gravity to the bird
@@ -81,8 +84,9 @@
 
             // Timer to spawn pipes
             this.time.addEvent({ delay: 1500, callback: spawnPipes, callbackScope: this, loop: true });
+            hitboxVisual = this.add.graphics();
         }
-
+          var playerhitboxs = false
         function update() {
             if (keyW.isDown) {
                 player.setVelocityY(-330);
@@ -98,6 +102,24 @@
                 player.setVelocityY(-330);
             }
             scoreText1.setText('Score:'+ score);
+            // Wis eerst de vorige frame's visualisatie
+            hitboxVisual.clear();
+if (keyP.isDown){
+    playerhitbox()
+    }
+    
+
+// Teken de hitbox visualisaties voor elke pijp in de groep
+pipes.getChildren().forEach(function(pipe) {
+        hitboxVisual.lineStyle(2, 0xff0000, 1);
+        hitboxVisual.strokeRect(
+            pipe.x - pipe.displayWidth * pipe.originX + pipe.body.offset.x,
+            pipe.y - pipe.displayHeight * pipe.originY + pipe.body.offset.y,
+            pipe.body.width,
+            pipe.body.height
+        );
+    });
+
             
            
         }
@@ -105,36 +127,43 @@
         var stopSpawning = false; // Globale variabele om het spawnen te stoppen
 
         function spawnPipes() {
-            if (stopSpawning) {
-        return; // Stop met spawnen als stopSpawning waar is
-            }
+  if (stopSpawning) {
+    return;
+  }
 
-            var gapHeight = 300;
-            var pipeY = Phaser.Math.Between(100, 350);
-            score += 1;
-            updateScore.call(this);
+  var gapHeight = 300;
+  var pipeY = Phaser.Math.Between(100, 350);
+  score += 1;
+  updateScore.call(this);
 
-            var topPipe = pipes.create(388, pipeY, 'pipe');
-            topPipe.setOrigin(0, 1);
-            topPipe.setVelocityX(-200);
+  var topPipe = pipes.create(388, pipeY, 'pipe', { body: { width: 10, height: 100 } });
+  topPipe.setOrigin(0, 1);
+  topPipe.setVelocityX(-200);
+  topPipe.body.setSize(10, 10)
+  
 
-            var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe');
-            var toptopPipe = pipes.create(400, pipeY + -gapHeight, 'pipe');
-            bottomPipe.setVelocityX(-200);
-            toptopPipe.setVelocityX(-200);
+  // Adjust collider for the top pipe
+  this.physics.add.collider(player, topPipe, hitPipe, null, this, { x: 0, y: -20, width: 56, height: 50 });
 
-            this.physics.world.on('worldbounds', function (body) {
-                if ((body.gameObject === topPipe || body.gameObject === bottomPipe || body.gameObject === toptopPipe) && body.blocked.left) {
-                    topPipe.destroy();
-                    bottomPipe.destroy();
-                    toptopPipe.destroy();
-                    incrementScore();
-                }
-            });
+  var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe', { body: { width: 10, height: 100 } });
+  var toptopPipe = pipes.create(400, pipeY + -gapHeight, 'pipe', { body: { width: 10, height: 100 } });
+  bottomPipe.setVelocityX(-200);
+  toptopPipe.setVelocityX(-200);
+  bottomPipe.body.setSize(10, 20)
+  toptopPipe.body.setSize(10, 30)
 
-            // Add an overlap event for player detection
-            this.physics.add.overlap(player, null, this);
-        }
+  this.physics.world.on('worldbounds', function (body) {
+    if ((body.gameObject === topPipe || body.gameObject === bottomPipe || body.gameObject === toptopPipe) && body.blocked.left) {
+      topPipe.destroy();
+      bottomPipe.destroy();
+      toptopPipe.destroy();
+      incrementScore();
+    }
+  });
+
+  // Add an overlap event for player detection
+  this.physics.add.overlap(player, null, this);
+}
         function updateScore() {
     // Update the displayed score
     // Check if the current score is higher than the stored high score
@@ -163,6 +192,17 @@
             gameOverText = this.add.text(100, 250, 'Game Over\n press f5 to retry', { fontSize: '48px', fill: '#000' });
             gameOverText.setDepth(1);
             stopSpawning = true
+        }
+        function playerhitbox(){
+    // Teken de hitbox visualisatie
+    hitboxVisual.lineStyle(2, 0xff0000, 1);
+    hitboxVisual.strokeRect(
+        player.x - player.displayWidth * player.originX + player.body.offset.x,
+        player.y - player.displayHeight * player.originY + player.body.offset.y,
+        player.body.width,
+        player.body.height
+    );
+            
         }
     </script>
     
