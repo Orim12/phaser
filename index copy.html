@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Tweeter</title>
+    <style>
+        body { margin: 0;}
+    </style>
+</head>
+
+<body>
+        <table width="100%" cellpadding="10">
+        <tr>
+            <td><h1>hiebcabcqwiheebfiawbsdckqewiujnidhqwbij</h1></td>
+        </tr>
+        <tr>
+            <td><script>var config = {
+                type: Phaser.AUTO,
+                width: 750,
+                height: 600,
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        gravity: { y: 0 },
+                        debug: false,
+                    }
+                },
+                scene: {
+                    preload: preload,
+                    create: create,
+                    update: update
+                },
+            };
+    
+    
+            var player;
+            var pipes;
+            var cursors;
+            var score = -1;
+            var highScore;
+            var scoreText;
+            var scoreText1;
+            let keyS;
+            let keyW;
+            let keyP
+            var hitboxVisual;
+            var spawnDelay = 1500;
+            var spawning;
+    
+            var game = new Phaser.Game(config);
+    
+            function preload() {
+                this.load.image('sky', 'pictures/background.png');
+                this.load.image('bird', 'pictures/bird.png');
+                this.load.image('pipe', 'pictures/pipe.png');
+            }
+    
+            function create() {
+                this.add.image(200, 300, 'sky');
+    
+                pipes = this.physics.add.group();
+                
+    
+                player = this.physics.add.sprite(100, 300, 'bird');
+                player.setCollideWorldBounds(true);
+                highScore = localStorage.getItem('highScore') || 0;
+    
+                this.physics.add.collider(player, pipes, hitPipe, null, this);
+    
+                cursors = this.input.keyboard.createCursorKeys();
+    
+                keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+                keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+                keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    
+                // Display the score
+                scoreText1 = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+                scoreText = this.add.text(450, 16, 'High Score: ' + highScore, { fontSize: '32px', fill: '#fff' });
+    
+                // Add gravity to the bird
+                player.body.gravity.y = 1000;
+    
+                // Timer to spawn pipes
+                spawning = this.time.addEvent({ delay: spawnDelay, callback: spawnPipes, callbackScope: this, loop: true });
+                hitboxVisual = this.add.graphics();
+            }
+              var playerhitboxs = false
+            function update() {
+                if (keyW.isDown) {
+                    player.setVelocityY(-330);
+                } else if (cursors.up.isDown) {
+                    player.setVelocityY(-330);
+                } else if (keyS.isDown) {
+                    player.setVelocityY(330);
+                } else {
+                    player.setVelocityX(0);
+                }
+    
+                if (keyW.isUp && player.body.touching.up) {
+                    player.setVelocityY(-330);
+                }
+                scoreText1.setText('Score:'+ score);
+                // Wis eerst de vorige frame's visualisatie
+                hitboxVisual.clear();
+                if (keyP.isDown){
+                    playerhitbox()
+                }
+        
+    
+                // Teken de hitbox visualisaties voor elke pijp in de groep
+                pipes.getChildren().forEach(function(pipe) {
+                        hitboxVisual.lineStyle(2, 0xff0000, 1);
+                        hitboxVisual.strokeRect(
+                            pipe.x - pipe.displayWidth * pipe.originX + pipe.body.offset.x,
+                            pipe.y - pipe.displayHeight * pipe.originY + pipe.body.offset.y,
+                            pipe.body.width,
+                            pipe.body.height
+                        );
+                    });
+    
+                
+               
+                }
+    
+            var stopSpawning = false; // Globale variabele om het spawnen te stoppen
+    
+            
+    
+            var speed = -200
+            function spawnPipes() {
+            if (stopSpawning) {
+                return;
+            }
+            
+    
+            var gapHeight = 300;
+            var pipeY = Phaser.Math.Between(100, 350);
+            var nextPoint = 10
+            score += 1;
+            if (score >= 10 && score % 10 === 0) {
+            speed -= 100;
+            console.log("Speed decreased!");
+            // Pas de spawntijd aan op basis van de snelheid
+            spawnDelay -= 100; // Verminder de vertraging met 100 milliseconden
+            spawning.remove(false);
+            spawning = this.time.addEvent({ delay: spawnDelay, callback: spawnPipes, callbackScope: this, loop: true });
+            console.log("Spawn delay decreased!");
+            }
+            
+            updateScore.call(this);
+            console.log("score:", score)
+            console.log("speed:", speed)
+            console.log("spawn delay:", spawnDelay)
+    
+            var topPipe = pipes.create(388, pipeY, 'pipe', { body: { width: 10, height: 100 } });
+            topPipe.setOrigin(0, 1);
+            topPipe.setVelocityX(speed);
+            topPipe.body.setSize(10, 10)
+      
+    
+            // Adjust collider for the top pipe
+            this.physics.add.collider(player, topPipe, hitPipe, null, this, { x: 0, y: -20, width: 56, height: 50 });
+    
+            var bottomPipe = pipes.create(400, pipeY + gapHeight, 'pipe', { body: { width: 10, height: 100 } });
+            var toptopPipe = pipes.create(400, pipeY + -gapHeight, 'pipe', { body: { width: 10, height: 100 } });
+            bottomPipe.setVelocityX(speed);
+            toptopPipe.setVelocityX(speed);
+            bottomPipe.body.setSize(10, 20)
+            toptopPipe.body.setSize(10, 30)
+    
+            this.physics.world.on('worldbounds', function (body) {
+              if ((body.gameObject === topPipe || body.gameObject === bottomPipe || body.gameObject === toptopPipe) && body.blocked.left) {
+                topPipe.destroy();
+                bottomPipe.destroy();
+                toptopPipe.destroy();
+                incrementScore();
+              }
+            });
+    
+            // Add an overlap event for player detection
+            this.physics.add.overlap(player, null, this);
+            
+            }
+            
+            function updateScore() {
+                // Update the displayed score
+                // Check if the current score is higher than the stored high score
+                if (score > highScore) {
+                   highScore = score;
+    
+                    // Save the new high score to local storage
+                    localStorage.setItem('highScore', highScore);
+    
+                    // Remove the old text before adding the new one
+                    scoreText.destroy();
+    
+                    // Update the displayed high score
+                    scoreText = this.add.text(450, 16, 'High Score: ' + highScore, { fontSize: '32px', fill: '#fff' });
+                }
+            }  
+     
+    
+    
+    
+            function hitPipe() {
+                // Game over logic
+                
+                this.physics.pause();
+                player.setTint(0xFF0000);
+                gameOverText = this.add.text(100, 250, 'Game Over\n press f5 to retry\n press p to see hitbox', { fontSize: '48px', fill: '#fff' });
+                gameOverText.setDepth(1);
+                stopSpawning = true
+            }
+            function playerhitbox(){
+                // Teken de hitbox visualisatie
+                hitboxVisual.lineStyle(2, 0xff0000, 1);
+                hitboxVisual.strokeRect(
+                    player.x - player.displayWidth * player.originX + player.body.offset.x,
+                    player.y - player.displayHeight * player.originY + player.body.offset.y,
+                    player.body.width,
+                    player.body.height
+                );
+                
+            }
+        </script></td>
+        </tr>
+        <tr>
+            <td><h1>tfgvybhuj</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+            <td><h1>stfrhyuijo</h1></td>
+        </tr>
+   
+      
+    
+    </table>
+</body>
+</html>
+
