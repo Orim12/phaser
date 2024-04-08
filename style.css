@@ -1,3 +1,9 @@
+#game-container {
+    /* Adjust the position of the game container as needed */
+    position: center;
+    width: 100%;
+    height: auto; /* Example height */
+}
 canvas {
     display : block;   
     margin : auto;
@@ -24,9 +30,3 @@ body{
     text-decoration: underline;
 }
 
-#game-container {
-    /* Adjust the position of the game container as needed */
-    position: relative;
-    width: 100%;
-    height: auto; /* Example height */
-}
