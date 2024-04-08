@@ -1,9 +1,4 @@
-#game-container {
-    /* Adjust the position of the game container as needed */
-    position: center;
-    width: 100%;
-    height: auto; /* Example height */
-}
+
 canvas {
     display : block;   
     margin : auto;
@@ -29,4 +24,12 @@ body{
 .ad-link:hover {
     text-decoration: underline;
 }
-
+#game-container {
+    /* Adjust the position of the game container as needed */
+    position: center;
+    width: 100%;
+    height: auto; /* Example height */
+}
+#game_button{
+    justify-content:center
+}
